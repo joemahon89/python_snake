@@ -22,7 +22,7 @@ def createboard(height, width):
 
 def starttimer():
 	#if gameover == False:
-	timer = Timer(0.2, refresh)
+	timer = Timer(0.1, refresh)
 	timer.start()
 
 
@@ -39,7 +39,7 @@ def place_food():
 	placedfood = False
 	while placedfood == False:
 		verti_spot, horiz_spot = pick_food_spot()
-		debugstring = str(verti_spot)+" "+str(horiz_spot)
+		#debugstring = str(verti_spot)+" "+str(horiz_spot)
 		if board[verti_spot][horiz_spot] == 0:
 			board[verti_spot][horiz_spot] = -1
 			placedfood = True
@@ -66,40 +66,68 @@ def refresh():
 
 			#print(item)
 			if item >= 1:
-				#if item % 2 == 0:
-				string +="\033[91m"+"#"+'\x1b[0m'
-				#else:
-				#	string +="\x1b[41m"+str(item)
+				if item % 2 == 0:
+					string +="\033[91m"+"██"+'\x1b[0m'
+				else:
+					string +="\033[92m"+"██"+'\x1b[0m'
 			elif item == -1:
-				string +="\033[91m"+"O"+'\x1b[0m'
+				string +="\033[93m"+"██"+'\x1b[0m'
 			else:
-				string += "\x1b[102m"+" "+'\x1b[0m'
+				string += "\x1b[102m"+"██"+'\x1b[0m'
 		string += "\n\r"
 	
 	os.system("clear")
-	sys.stdout.write(string + "\r"+ '\x1b[0m'+debugstring)	
+	sys.stdout.write(string + "\r"+ '\x1b[0m'+"SCORE: "+score+debugstring)	
 	sys.stdout.flush()
 	timerdown = True
-	starttimer()
+	if gameover == False:
+		starttimer()
 
 		
 def move():
 	global headloc
 	global gameover
 	global timerdown
-	movedir = direction
-	if movedir == "UP":
-		vector = (-1,0)
-	elif movedir == "DOWN":
-		vector = (1,0)
-	elif movedir == "LEFT":
-		vector = (0,-1)
-	elif movedir == "RIGHT":
-		vector = (0,1)
+	global score
+	global vector
+	global new_direction
+	global current_direction
+	newdir = False
+	if new_direction == "UP":
+		if current_direction != "DOWN":
+			vector = (-1,0)
+			newdir = True
+	elif new_direction == "DOWN":
+		if current_direction != "UP":
+			vector = (1,0)
+			newdir = True
+	elif new_direction == "LEFT":
+		if current_direction != "RIGHT":
+			vector = (0,-1)
+			newdir = True
+	elif new_direction == "RIGHT":
+		if current_direction != "LEFT":
+			vector = (0,1)
+			newdir = True
 	currentloc = headloc
+	if newdir == True:
+		current_direction = new_direction
+
 	# Apply vector to get new location
 	newloc = [currentloc[0]+vector[0],currentloc[1]+vector[1]]
 	
+	# Going past V min/max
+	if newloc[0] == -1:
+		newloc[0] = height-1
+	elif newloc[0] == height:
+		newloc[0] = 0
+
+	# Goin past H min/max
+	if newloc[1] == -1:
+		newloc[1] = width-1
+	elif newloc[1] == width:
+		newloc[1] = 0	
+
 	# Check whether it is safe to move there
 	if board[newloc[0]][newloc[1]] <= 0:
 		
@@ -107,6 +135,9 @@ def move():
 		if board[newloc[0]][newloc[1]] == -1:
 			timerdown = False
 			board[newloc[0]][newloc[1]] = 0
+			# add to score, int/str conv done here so not done evry frame
+			score = str(int(score)+1)
+
 			#generate new food spot
 			place_food()
 
@@ -118,6 +149,7 @@ def move():
 	else:
 		debugstring = "GAME OVER"
 		gameover = True
+		print_game_over()
 
 
 
@@ -135,6 +167,29 @@ def getch():
 		return ch
 
 
+def print_game_over():
+	string = ""
+	string +="\n\r"
+	string +="\n\r"
+	string +=("\033[91m"+"   ███ ███ ██ ██ ███ ███ █ █ ███ ███"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   █   █ █ █ █ █ █   █ █ █ █ █   █ █"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   █ █ ███ █ █ █ ██  █ █ █ █ ██  ██"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   █ █ █ █ █   █ █   █ █ █ █ █   █ █"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   ███ █ █ █   █ ███ ███  █  ███ █ █"+'\x1b[0m'*width)+"\n\r"
+	string +="\n\r"
+	string +="\n\r"
+	string +="\n\r"
+
+
+	# for row in board:
+	# 	for item in row:
+	# 		string +="\033[91m"+"██"+'\x1b[0m'
+	# 	string += "\n\r"
+	os.system("clear")
+	sys.stdout.write(string + "\r"+ '\x1b[0m'+"FINAL SCORE: "+score+"\r\n")	
+	sys.stdout.flush()
+	print("")
+	exit()
 
 height = 10
 width = 20
@@ -154,13 +209,14 @@ board[startloc_v][startloc_h] = 5
 headloc = [startloc_v, startloc_h]
 
 
-direction = "RIGHT"
+current_direction = "RIGHT"
+new_direction = "RIGHT"
 gameover = False
 
 # makes snake not be infinite length
 timerdown = True
 
-
+score = "0"
 starttimer()
 
 while gameover == False:
@@ -172,12 +228,16 @@ while gameover == False:
 		gameover = True
 	
 	if char == "w":
-		direction = "UP"
+		new_direction = "UP"
 	if char == "a":
-		direction = "LEFT"
+		new_direction = "LEFT"
 	if char == "d":
-		direction = "RIGHT"
+		new_direction = "RIGHT"
 	if char == "s":
-		direction = "DOWN"
+		new_direction = "DOWN"
 
 sys.exit()
+
+
+# todo
+# swap wasd with arrow keys

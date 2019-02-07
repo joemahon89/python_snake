@@ -22,6 +22,7 @@ def createboard(height, width):
 
 def starttimer():
 	#if gameover == False:
+	global timer
 	timer = Timer(0.1, refresh)
 	timer.start()
 
@@ -71,13 +72,16 @@ def refresh():
 				else:
 					string +="\033[92m"+"██"+'\x1b[0m'
 			elif item == -1:
-				string +="\033[93m"+"██"+'\x1b[0m'
+				string +="\033[90m"+"██"+'\x1b[0m'
 			else:
 				string += "\x1b[102m"+"██"+'\x1b[0m'
 		string += "\n\r"
 	
-	os.system("clear")
-	sys.stdout.write(string + "\r"+ '\x1b[0m'+"SCORE: "+score+debugstring)	
+	#os.system("clear")
+	#scorestring = "\r"+ '\x1b[0m'+"    "+"\033[102m"+" CURRENT SCORE: "+score+"     [Q TO QUIT] "+debugstring+'\x1b[0m'+"\n\r"
+	scorestring = "\r"+ '\x1b[0m'+"    "+"\033[102m"+" CURRENT SCORE: "+score+"     [Q TO QUIT] "+debugstring+"\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F"+'\x1b[0m'
+	scorestringe = scorestring + ""*(40-len(scorestring))
+	sys.stdout.write(string + scorestring)	
 	sys.stdout.flush()
 	timerdown = True
 	if gameover == False:
@@ -179,17 +183,33 @@ def print_game_over():
 	string +="\n\r"
 	string +="\n\r"
 	string +="\n\r"
-
-
-	# for row in board:
-	# 	for item in row:
-	# 		string +="\033[91m"+"██"+'\x1b[0m'
-	# 	string += "\n\r"
 	os.system("clear")
-	sys.stdout.write(string + "\r"+ '\x1b[0m'+"FINAL SCORE: "+score+"\r\n")	
+	sys.stdout.write(string + "\r"+ '\x1b[0m'+"          FINAL SCORE: "+score+"\r\n"+"\n\r")	
 	sys.stdout.flush()
-	print("")
+	#print("")
+	#print("")
 	exit()
+
+def print_start_game():
+	string = ""
+	string +="\n\r"
+	string +="\n\r"
+	string +=("\033[91m"+"   ██████ ██████ ██████ ██  ██ ██████"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   ██     ██  ██ ██  ██ ██  ██ ██"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   ██████ ██  ██ ██████ ████   █████"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"       ██ ██  ██ ██  ██ ██  ██ ██"+'\x1b[0m'*width)+"\n\r"
+	string +=("\033[91m"+"   ██████ ██  ██ ██  ██ ██  ██ ██████"+'\x1b[0m'*width)+"\n\r"
+	string +="\n\r"
+	string +="\n\r"
+	string +="\n\r"
+	os.system("clear")
+	sys.stdout.write(string + "\r"+ '\x1b[0m'+"          PRESS S TO BEGIN"+"\r\n")	
+	sys.stdout.flush()
+
+
+
+
+
 
 height = 10
 width = 20
@@ -215,10 +235,21 @@ gameover = False
 
 # makes snake not be infinite length
 timerdown = True
-
+timer = ""
 score = "0"
+
+startgame = False
+print_start_game()
+while startgame == False:
+	char = getch()
+	if char == "s":
+		os.system("clear")
+		startgame = True
+
+
 starttimer()
 
+char = "d"
 while gameover == False:
 	
 	char = getch()
@@ -236,7 +267,8 @@ while gameover == False:
 	if char == "s":
 		new_direction = "DOWN"
 
-sys.exit()
+timer.cancel()
+print_game_over()
 
 
 # todo

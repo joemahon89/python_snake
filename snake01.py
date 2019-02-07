@@ -241,3 +241,4 @@ sys.exit()
 
 # todo
 # swap wasd with arrow keys
+# rather than reprint, use this to go the start of prev line "\033[F"

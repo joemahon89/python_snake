@@ -68,13 +68,13 @@ def refresh():
 			#print(item)
 			if item >= 1:
 				if item % 2 == 0:
-					string +="\033[91m"+"██"+'\x1b[0m'
+					string +=snakecolour1+"██"+'\x1b[0m'
 				else:
-					string +="\033[92m"+"██"+'\x1b[0m'
+					string +=snakecolour2+"██"+'\x1b[0m'
 			elif item == -1:
-				string +="\033[90m"+"██"+'\x1b[0m'
+				string +=black+"██"+'\x1b[0m'
 			else:
-				string += "\x1b[102m"+"██"+'\x1b[0m'
+				string += green+"██"+'\x1b[0m'
 		string += "\n\r"
 	
 	#os.system("clear")
@@ -96,6 +96,8 @@ def move():
 	global vector
 	global new_direction
 	global current_direction
+	global snakecolour1
+	global snakecolour2
 	newdir = False
 	if new_direction == "UP":
 		if current_direction != "DOWN":
@@ -143,6 +145,7 @@ def move():
 			score = str(int(score)+1)
 
 			#generate new food spot
+			snakecolour1, snakecolour2 = snakecolour2, snakecolour1
 			place_food()
 
 		# Set value of current loc (in s)
@@ -194,11 +197,11 @@ def print_start_game():
 	string = ""
 	string +="\n\r"
 	string +="\n\r"
-	string +=("\033[91m"+"   ██████ ██████ ██████ ██  ██ ██████"+'\x1b[0m'*width)+"\n\r"
-	string +=("\033[91m"+"   ██     ██  ██ ██  ██ ██  ██ ██"+'\x1b[0m'*width)+"\n\r"
-	string +=("\033[91m"+"   ██████ ██  ██ ██████ ████   █████"+'\x1b[0m'*width)+"\n\r"
-	string +=("\033[91m"+"       ██ ██  ██ ██  ██ ██  ██ ██"+'\x1b[0m'*width)+"\n\r"
-	string +=("\033[91m"+"   ██████ ██  ██ ██  ██ ██  ██ ██████"+'\x1b[0m'*width)+"\n\r"
+	string +=(red+"   ██████ ██████ ██████ ██  ██ ██████"+'\x1b[0m'*width)+"\n\r"
+	string +=(red+"   ██     ██  ██ ██  ██ ██  ██ ██"+'\x1b[0m'*width)+"\n\r"
+	string +=(red+"   ██████ ██  ██ ██████ ████   █████"+'\x1b[0m'*width)+"\n\r"
+	string +=(red+"       ██ ██  ██ ██  ██ ██  ██ ██"+'\x1b[0m'*width)+"\n\r"
+	string +=(red+"   ██████ ██  ██ ██  ██ ██  ██ ██████"+'\x1b[0m'*width)+"\n\r"
 	string +="\n\r"
 	string +="\n\r"
 	string +="\n\r"
@@ -206,14 +209,27 @@ def print_start_game():
 	sys.stdout.write(string + "\r"+ '\x1b[0m'+"          PRESS S TO BEGIN"+"\r\n")	
 	sys.stdout.flush()
 
-
-
-
+black='\033[30m'
+red='\033[31m'
+green='\033[32m'
+orange='\033[33m'
+blue='\033[34m'
+purple='\033[35m'
+cyan='\033[36m'
+lightgrey='\033[37m'
+darkgrey='\033[90m'
+lightred='\033[91m'
+lightgreen='\033[92m'
+yellow='\033[93m'
+lightblue='\033[94m'
+pink='\033[95m'
+lightcyan='\033[96m'
 
 
 height = 10
 width = 20
-
+snakecolour1 = orange
+snakecolour2 = red
 
 board = createboard(height, width)
 

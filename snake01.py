@@ -3,11 +3,12 @@ from pprint import pprint
 from threading import Timer
 import sys, termios, tty, os, time
 from random import randint
+import argparse
 
 
-
-
-
+parser = argparse.ArgumentParser(description='Python snake version 1.0. Optional arguments to set difficulty- default is medium')
+parser.add_argument("-l", "--level", type=str, choices=["hard","medium","easy"], help='enter the level of difficulty you would like to play at, hard, medium or easy')
+args = parser.parse_args()
 
 def createboard(height, width):
 	board = []
@@ -23,7 +24,14 @@ def createboard(height, width):
 def starttimer():
 	#if gameover == False:
 	global timer
-	timer = Timer(0.1, refresh)
+	if args.level == "hard":
+		timer = Timer(0.05, refresh)
+	elif args.level == "medium":
+		timer = Timer(0.1, refresh)
+	elif args.level == "easy":
+		timer = Timer(0.25, refresh)
+	else:
+		timer = Timer(0.1, refresh)
 	timer.start()
 
 

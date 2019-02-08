@@ -8,6 +8,10 @@ No helpful comments and includes horrible abuse of global variables as uses >1 t
 Only tested on linux, probably won't work on Windows, Mac who knows?  
 
 just clone and run `python snake01.py`  
+optional arguments:  
+-l --level to set difficulty. options: easy, medium, hard  
+default difficulty is medium  
+
 Controls  
 Up: W  
 Down: S  

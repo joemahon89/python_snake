@@ -74,14 +74,14 @@ def refresh():
 			elif item == -1:
 				string +=black+"██"+'\x1b[0m'
 			else:
-				string += green+"██"+'\x1b[0m'
+				string += lightgreen+"██"+'\x1b[0m'
 		string += "\n\r"
 	
 	#os.system("clear")
 	#scorestring = "\r"+ '\x1b[0m'+"    "+"\033[102m"+" CURRENT SCORE: "+score+"     [Q TO QUIT] "+debugstring+'\x1b[0m'+"\n\r"
-	scorestring = "\r"+ '\x1b[0m'+"    "+"\033[102m"+" CURRENT SCORE: "+score+"     [Q TO QUIT] "+debugstring+"\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F"+'\x1b[0m'
+	scorestring = "\r"+"    "+" CURRENT SCORE: "+score+"     [Q TO QUIT] "+debugstring+'\x1b[0m'
 	scorestringe = scorestring + ""*(40-len(scorestring))
-	sys.stdout.write(string + scorestring)	
+	sys.stdout.write("\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F\033[F"+black+string + scorestring)	
 	sys.stdout.flush()
 	timerdown = True
 	if gameover == False:
@@ -176,6 +176,7 @@ def getch():
 
 def print_game_over():
 	string = ""
+
 	string +="\n\r"
 	string +="\n\r"
 	string +=("\033[91m"+"   ███ ███ ██ ██ ███ ███ █ █ ███ ███"+'\x1b[0m'*width)+"\n\r"
@@ -228,7 +229,7 @@ lightcyan='\033[96m'
 
 height = 10
 width = 20
-snakecolour1 = orange
+snakecolour1 = lightred
 snakecolour2 = red
 
 board = createboard(height, width)
